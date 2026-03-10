@@ -1,0 +1,7 @@
+group Game
+  FSharp.Core
+  Fable.Elmish
+  Fable.Elmish.HMR
+  Feliz
+  Feliz.Router
+  Thekla.Player

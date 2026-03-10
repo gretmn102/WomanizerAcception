@@ -1,0 +1,4 @@
+group Scenario
+  FSharp.Core
+  FSharpMyExt
+  Shilazeron

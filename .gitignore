@@ -1,0 +1,6 @@
+/paket-files/
+bin
+obj
+/deploy/
+
+node_modules
