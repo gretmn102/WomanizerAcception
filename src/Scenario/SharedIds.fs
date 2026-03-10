@@ -1,6 +1,13 @@
 module WomanizerAcception.Scenario.SharedIds
 
-let аптекаId = "аптека"
-let снаружиАптекиId = "снаружиАптеки"
+module Objects =
+    module Ты =
+        let id = "Ты"
 
-let milfId = "milf"
+    module Блондинка =
+        let id = "Блондинка"
+
+module Locations =
+    module Ресторан =
+        let id = "ресторан"
+

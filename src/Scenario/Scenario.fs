@@ -13,37 +13,8 @@ let milf: Object = {
     Actions = []
 }
 
-let аптека: Location = {
-    Id = аптекаId
-    Name = "Аптека"
-    InitObjects = [milfId]
-    Description = [
-        sentence [
-            text "За "
-            link "прилавком" [
-                action "Подойти" [
-
-                ]
-            ]
-            text " снует "
-            object milfId "знойная продавщица" [
-                action "Осмотреть" []
-            ]
-            text "."
-        ]
-        sentence [
-            link "Выход" [
-                action "Выйти" [
-                    Statement.Goto снаружиАптекиId
-                ]
-            ]
-            text " на улицу."
-        ]
-    ]
-}
-
 let снаружиАптеки: Location = {
-    Id = снаружиАптекиId
+    Id = ресторанId
     Name = "У входа в аптеку"
     InitObjects = []
     Description = [
@@ -76,6 +47,6 @@ let scenario : GameScenario =
             снаружиАптеки
             аптека
         ] |> List.map (fun x -> x.Id, x) |> Map
-        StartLocationId = снаружиАптекиId
+        StartLocationId = ресторанId
         InitObjectIds = []
     }
