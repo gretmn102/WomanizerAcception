@@ -242,7 +242,10 @@ let mainTest =
             location |> expectEqualLocationName Конец.id
             location |> expectEqualLocationDescription [
                 [
-                    text "Спасибо за игру! Надеемся, вам понравилось."
+                    text "«Да и пофиг», — думаешь ты, обнимаешь двух прелестниц и уплетаешь бабулин пирожок."
+                ]
+                [
+                    text "Спасибо, что поиграли! Надеемся, вам понравилось."
                 ]
             ]
             ()
