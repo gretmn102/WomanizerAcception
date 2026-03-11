@@ -66,7 +66,7 @@ let mainTest =
             location |> expectEqualLocationDescription [
                 [
                     ты "Ты" []
-                    text "сидишь за "
+                    text " сидишь за "
                     link "столом" []
                     text "."
                 ]

@@ -136,7 +136,7 @@ module Locations =
                     тыIf "Ты" (
                         Expr.not <| Expr.thisLocationHasObject Брюнетка.id
                     ) []
-                    text "сидишь за "
+                    text " сидишь за "
                     link "столом" []
                     text "."
                 ]
