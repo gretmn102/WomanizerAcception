@@ -171,6 +171,16 @@ module Locations =
                         ) []
                         text " переглядываются."
                     ]
+                    sentence [
+                        блондинкаIf "Блондиночка" (
+                            Expr.thisObjectHasState Блондинка.метаетМолнииВБрюнетку
+                        ) []
+                        text " с "
+                        брюнеткаIf "брюнеточкой" (
+                            Expr.thisObjectHasState Брюнетка.метаетМолнииВБлондинку
+                        ) []
+                        text " стоят возле стола и метают в друг друга молнии."
+                    ]
                 ]
                 oneOf [
                     sentence [
@@ -179,12 +189,34 @@ module Locations =
                             Expr.thisObjectHasState Бабуля.суетНосНеВСвоиДела
                         ) [
                             action "Огрызнуться" [
-                                Statement.removeObjectState Бабуля.id Бабуля.суетНосНеВСвоиДела
                                 Statement.removeObjectState Блондинка.id Блондинка.думаетЧтоБрюнеткаЛжет
+                                Statement.addObjectState Блондинка.id Блондинка.метаетМолнииВБрюнетку
+
                                 Statement.removeObjectState Брюнетка.id Брюнетка.думаетЧтоБлондинкаЕйНеВерит
+                                Statement.addObjectState Брюнетка.id Брюнетка.метаетМолнииВБлондинку
+
+                                Statement.removeObjectState Бабуля.id Бабуля.суетНосНеВСвоиДела
+                                Statement.addObjectState Бабуля.id Бабуля.спрашиваетКакТыДошелДоТакого
                             ]
                         ]
                         text " и спрашивает: «Внучок, ты ловелас, што ле?»."
+                    ]
+                    sentence [
+                        бабуляIf "Бабуля" (
+                            Expr.thisObjectHasState Бабуля.спрашиваетКакТыДошелДоТакого
+                        ) [
+                            action "Наплести про выбор спутницы жизни" [
+                                Statement.removeObjectState Блондинка.id Блондинка.метаетМолнииВБрюнетку
+                                // Statement.addObjectState Блондинка.id Блондинка.метаетМолнииВБрюнетку
+
+                                Statement.removeObjectState Брюнетка.id Брюнетка.метаетМолнииВБлондинку
+                                // Statement.addObjectState Брюнетка.id Брюнетка.метаетМолнииВБлондинку
+
+                                Statement.removeObjectState Бабуля.id Бабуля.спрашиваетКакТыДошелДоТакого
+                                // Statement.addObjectState Бабуля.id Бабуля.спрашиваетКакТыДошелДоТакого
+                            ]
+                        ]
+                        text " сидит за столом напротив тебя и спрашивает, как ты дошел до жизни такой."
                     ]
                 ]
             ]
