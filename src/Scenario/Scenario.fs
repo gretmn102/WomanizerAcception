@@ -21,6 +21,9 @@ module CharacterAliases =
     let брюнетка = object Брюнетка.id
     let брюнеткаIf = objectIf Брюнетка.id
 
+    let бабуля = object Бабуля.id
+    let бабуляIf = objectIf Бабуля.id
+
 open CharacterAliases
 
 module Objects =
@@ -145,10 +148,43 @@ module Locations =
                         ) [
                             action "Отрицать" [
                                 Statement.removeObjectState Блондинка.id Блондинка.уточняетЛовеласЛиТы
+                                Statement.addObjectState Блондинка.id Блондинка.думаетЧтоБрюнеткаЛжет
+
                                 Statement.removeObjectState Брюнетка.id Брюнетка.срещиваетРуки
+                                Statement.addObjectState Брюнетка.id Брюнетка.думаетЧтоБлондинкаЕйНеВерит
+
+                                Statement.addObjectState Бабуля.id Бабуля.суетНосНеВСвоиДела
+                                Statement.addObjectToThisLocation Бабуля.id
                             ]
                         ]
                         text " уточняет у тебя: «Ты ловелас?»"
+                    ]
+                ]
+                oneOf [
+                    sentence [
+                        блондинкаIf "Блондиночка" (
+                            Expr.thisObjectHasState Блондинка.думаетЧтоБрюнеткаЛжет
+                        ) []
+                        text " и "
+                        брюнеткаIf "брюнеточка" (
+                            Expr.thisObjectHasState Брюнетка.думаетЧтоБлондинкаЕйНеВерит
+                        ) []
+                        text " переглядываются."
+                    ]
+                ]
+                oneOf [
+                    sentence [
+                        text "Справа стоит "
+                        бабуляIf "бабуля" (
+                            Expr.thisObjectHasState Бабуля.суетНосНеВСвоиДела
+                        ) [
+                            action "Огрызнуться" [
+                                Statement.removeObjectState Бабуля.id Бабуля.суетНосНеВСвоиДела
+                                Statement.removeObjectState Блондинка.id Блондинка.думаетЧтоБрюнеткаЛжет
+                                Statement.removeObjectState Брюнетка.id Брюнетка.думаетЧтоБлондинкаЕйНеВерит
+                            ]
+                        ]
+                        text " и спрашивает: «Внучок, ты ловелас, што ле?»."
                     ]
                 ]
             ]
