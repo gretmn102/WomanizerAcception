@@ -202,9 +202,12 @@ let mainTest =
                 next |> expectRefreshLocation
 
             let location, next =
-                (location, next)
-                |> selectObjectAction Пирожок.id "Съесть"
-                |> expectRefreshLocation
+                let obj, next =
+                    next
+                    |> selectInventoryObjectAction Пирожок.id "Съесть"
+                    |> expectRemoveObjectFromHero
+                expectEqualRemovedObjectFromHero obj Пирожок.id
+                next |> expectGoToLocation
 
             location |> expectEqualLocationName Комната.id
             location |> expectEqualLocationDescription [
