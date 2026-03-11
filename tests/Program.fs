@@ -229,20 +229,14 @@ let mainTest =
                     text "Рядом с кроватью стоит "
                     бабуля "бабуля в неприличном одежде" []
                     text " с "
-                    тарелкаСПирожками "тарелкой пирожков" [
-                        action "Взять"
-                    ]
+                    тарелкаСПирожками "тарелкой пирожков" []
                     text " и спрашивает: «Еще пирожков, старый разбойник?»."
                 ]
             ]
-            let location, next =
-                (location, next)
-                |> нажатьТы "Крепко задуматься"
-                |> expectRefreshLocation
 
             let location, next =
                 (location, next)
-                |> нажатьТарелкаСПирожками "Взять"
+                |> нажатьТы "Крепко задуматься"
                 |> expectGoToLocation
 
             location |> expectEqualLocationName Конец.id
