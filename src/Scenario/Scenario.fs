@@ -19,6 +19,7 @@ module CharacterAliases =
     let блондинкаIf = objectIf Блондинка.id
 
     let брюнетка = object Брюнетка.id
+    let брюнеткаIf = objectIf Брюнетка.id
 
 open CharacterAliases
 
@@ -94,13 +95,29 @@ module Locations =
                     link "столом" []
                     text "."
                 ]
-                sentence [
-                    text "Слева от стола появляется до боли "
-                    брюнетка "знакомая брюнеточка" [
-                        action "Удивиться" []
+                oneOf [
+                    sentence [
+                        text "Слева от стола появляется до боли "
+                        брюнеткаIf "знакомая брюнеточка" (
+                            Expr.thisObjectHasState Брюнетка.узнаетЧтоТыНаСвиданииСДругой
+                        ) [
+                            action "Удивиться" [
+                                Statement.removeObjectState Брюнетка.id Брюнетка.узнаетЧтоТыНаСвиданииСДругой
+                                Statement.addObjectState Брюнетка.id Брюнетка.срещиваетРуки
+
+                                Statement.removeObjectState Блондинка.id Блондинка.узнаетОСуществованииБрюнетки
+                                Statement.addObjectState Блондинка.id Блондинка.уточняетЛовеласЛиТы
+                            ]
+                        ]
+                        text " и кричит на тебя: «Ловелас!»"
+                        text "."
                     ]
-                    text " и кричит на тебя: «Ловелас!»"
-                    text "."
+                    sentence [
+                        брюнеткаIf "Брюнеточка" (
+                            Expr.thisObjectHasState Брюнетка.срещиваетРуки
+                        ) []
+                        text " стоит со скрещенными руками и злобно смотрит на тебя."
+                    ]
                 ]
                 oneOf [
                     sentence [
@@ -109,14 +126,29 @@ module Locations =
                             Expr.not <| Expr.thisLocationHasObject Брюнетка.id
                         ) [
                             action "Сказать комплимент" [
+                                Statement.addObjectState Брюнетка.id Брюнетка.узнаетЧтоТыНаСвиданииСДругой
                                 Statement.addObjectToThisLocation Брюнетка.id
+                                Statement.addObjectState Блондинка.id Блондинка.узнаетОСуществованииБрюнетки
                             ]
                         ]
                         text "."
                     ]
                     sentence [
-                        блондинка "Блондиночка" []
+                        блондинкаIf "Блондиночка" (
+                            Expr.thisObjectHasState Блондинка.узнаетОСуществованииБрюнетки
+                        ) []
                         text " смотрит на тебя округленными глазами."
+                    ]
+                    sentence [
+                        блондинкаIf "Блондиночка" (
+                            Expr.thisObjectHasState Блондинка.уточняетЛовеласЛиТы
+                        ) [
+                            action "Отрицать" [
+                                Statement.removeObjectState Блондинка.id Блондинка.уточняетЛовеласЛиТы
+                                Statement.removeObjectState Брюнетка.id Брюнетка.срещиваетРуки
+                            ]
+                        ]
+                        text " уточняет у тебя: «Ты ловелас?»"
                     ]
                 ]
             ]
