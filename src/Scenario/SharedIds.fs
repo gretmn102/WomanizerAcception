@@ -7,7 +7,21 @@ module Objects =
     module Блондинка =
         let id = "Блондинка"
 
+    module Брюнетка =
+        let id = "Брюнетка"
+
+    module Бабуля =
+        let id = "Бабуля"
+
+    module ТарелкаСПирожками =
+        let id = "ТарелкаСПирожками"
+
 module Locations =
     module Ресторан =
-        let id = "ресторан"
+        let id = "Ресторан"
 
+    module Комната =
+        let id = "Комната"
+
+    module Конец =
+        let id = "Конец"
