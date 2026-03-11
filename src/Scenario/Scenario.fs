@@ -6,47 +6,106 @@ open Shilazeron.Helpers
 
 open WomanizerAcception.Scenario.SharedIds
 
-let milf: Object = {
-    Id = milfId
-    Name = Expr.str "Знойная продавщица"
-    InitStates = []
-    Actions = []
-}
+module Objects =
+    module ТарелкаСПирожками =
+        open WomanizerAcception.Scenario.SharedIds.Objects.ТарелкаСПирожками
 
-let снаружиАптеки: Location = {
-    Id = ресторанId
-    Name = "У входа в аптеку"
-    InitObjects = []
-    Description = [
-        sentence [
-            text "Из витрины виднеется "
-            link "кое-что" [
-                action "Осмотреть" [
-                    Statement.message "Это кое-что просто сводит тебя с ума. Ты долго собирался с духом, чтобы придти сюда и купить ЭТО."
-                ]
-            ]
-            text "."
-        ]
-        sentence [
-            link "Стеклянная дверь" [
-                action "Войти" [
-                    Statement.Goto аптекаId
-                ]
-            ]
-            text " приглашает тебя внутрь."
-        ]
-    ]
-}
+        let object: Object = {
+            Id = id
+            Name = Expr.str "Тарелка с пирожками"
+            InitStates = []
+            Actions = []
+        }
+
+module Characters =
+    module Ты =
+        open WomanizerAcception.Scenario.SharedIds.Characters.Ты
+
+        let object: Object = {
+            Id = id
+            Name = Expr.str "Ты"
+            InitStates = []
+            Actions = []
+        }
+
+    module Блондинка =
+        open WomanizerAcception.Scenario.SharedIds.Characters.Блондинка
+
+        let object: Object = {
+            Id = id
+            Name = Expr.str "Блондинка"
+            InitStates = []
+            Actions = []
+        }
+
+    module Брюнетка =
+        open WomanizerAcception.Scenario.SharedIds.Characters.Брюнетка
+
+        let object: Object = {
+            Id = id
+            Name = Expr.str "Брюнетка"
+            InitStates = []
+            Actions = []
+        }
+
+    module Бабуля =
+        open WomanizerAcception.Scenario.SharedIds.Characters.Бабуля
+
+        let object: Object = {
+            Id = id
+            Name = Expr.str "Бабуля"
+            InitStates = []
+            Actions = []
+        }
+
+module Locations =
+    open Characters
+    open Objects
+
+    module Ресторан =
+        open WomanizerAcception.Scenario.SharedIds.Locations.Ресторан
+
+        let location: Location = {
+            Id = id
+            Name = "Ресторан"
+            InitObjects = []
+            Description = []
+        }
+
+    module Комната =
+        open WomanizerAcception.Scenario.SharedIds.Locations.Комната
+
+        let location: Location = {
+            Id = id
+            Name = "Комната"
+            InitObjects = []
+            Description = []
+        }
+
+    module Конец =
+        open WomanizerAcception.Scenario.SharedIds.Locations.Конец
+
+        let location: Location = {
+            Id = id
+            Name = "Конец"
+            InitObjects = []
+            Description = []
+        }
 
 let scenario : GameScenario =
     {
         Objects = [
-            milf
+            Objects.ТарелкаСПирожками.object
+            Characters.Ты.object
+            Characters.Блондинка.object
+            Characters.Брюнетка.object
+            Characters.Бабуля.object
         ] |> List.map (fun x -> x.Id, x) |> Map
         Locations = [
-            снаружиАптеки
-            аптека
+            Locations.Ресторан.location
+            Locations.Комната.location
+            Locations.Конец.location
         ] |> List.map (fun x -> x.Id, x) |> Map
-        StartLocationId = ресторанId
+        StartLocationId = Locations.Ресторан.id
         InitObjectIds = []
     }

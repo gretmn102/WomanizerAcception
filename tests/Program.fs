@@ -12,6 +12,12 @@ open WomanizerAcception.Scenario.Tests.Utils
 module Objects =
     open WomanizerAcception.Scenario.SharedIds.Objects
 
+    let тарелкаСПирожками =
+        object ТарелкаСПирожками.id
+
+module Characters =
+    open WomanizerAcception.Scenario.SharedIds.Characters
+
     let ты =
         object Ты.id
 
@@ -24,10 +30,8 @@ module Objects =
     let бабуля =
         object Бабуля.id
 
-    let тарелкаСПирожками =
-        object ТарелкаСПирожками.id
-
 module LocationActions =
+    open WomanizerAcception.Scenario.SharedIds.Characters
     open WomanizerAcception.Scenario.SharedIds.Objects
 
     let нажатьТы =
@@ -45,6 +49,7 @@ module LocationActions =
     let нажатьТарелкаСПирожками =
         selectObjectAction ТарелкаСПирожками.id
 
+open Characters
 open Objects
 open LocationActions
 

@@ -1,6 +1,6 @@
 module WomanizerAcception.Scenario.SharedIds
 
-module Objects =
+module Characters =
     module Ты =
         let id = "Ты"
 
@@ -13,6 +13,7 @@ module Objects =
     module Бабуля =
         let id = "Бабуля"
 
+module Objects =
     module ТарелкаСПирожками =
         let id = "ТарелкаСПирожками"
 
