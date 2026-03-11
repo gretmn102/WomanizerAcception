@@ -194,7 +194,7 @@ module GameProject =
     let viteBuildTarget = prefix + "ViteBuild"
     Target.create viteBuildTarget (fun _ ->
         projectDirectory
-        |> npm $"run vite:build -- --outDir {deployDirectory}"
+        |> npm $"run vite:build -- --base ./ --outDir {deployDirectory}"
     )
 
     fableCleanTarget ?=> fableBuildTarget

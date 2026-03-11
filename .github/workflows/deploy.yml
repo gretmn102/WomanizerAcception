@@ -1,0 +1,64 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    # Review gh actions docs if you want to further define triggers, paths, etc
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#on
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.x.x
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '18.x'
+
+      - name: Restore
+        run: dotnet tool restore
+
+      - name: Paket install
+        run: dotnet paket install
+
+      - run: npm ci
+
+      - name: Build
+        run: dotnet fsi build.fsx -t GameDeploy
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Build Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: deploy
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
