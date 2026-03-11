@@ -6,6 +6,13 @@ open Shilazeron.Helpers
 
 open WomanizerAcception.Scenario.SharedIds
 
+module Statement =
+    let moveObjectToLocation objectId locationId =
+        [
+            Statement.removeObjectFromThisLocation objectId
+            Statement.addObjectToLocation objectId locationId
+        ]
+
 module ObjectAliases =
     open WomanizerAcception.Scenario.SharedIds.Objects
 
@@ -246,6 +253,12 @@ module Locations =
                                 Statement.removeObjectState Блондинка.id Блондинка.держитВолосыБрюнетки
                                 Statement.removeObjectState Брюнетка.id Брюнетка.держитВолосыБлондинки
                                 Statement.removeObjectState Бабуля.id Бабуля.предлагаетСпасительныйПирожок
+
+                                yield! Statement.moveObjectToLocation Блондинка.id Locations.Комната.id
+                                yield! Statement.moveObjectToLocation Брюнетка.id Locations.Комната.id
+                                yield! Statement.moveObjectToLocation Бабуля.id Locations.Комната.id
+                                yield! Statement.moveObjectToLocation ТарелкаСПирожками.id Locations.Комната.id
+                                yield! Statement.moveObjectToLocation Ты.id Locations.Комната.id
                                 Statement.Goto Locations.Комната.id
                             ]
                         ]
@@ -262,7 +275,31 @@ module Locations =
             Id = id
             Name = "Комната"
             InitObjects = []
-            Description = []
+            Description = [
+                sentence [
+                    ты "Ты" [
+                        action "Крепко задуматься" []
+                    ]
+                    text " лежишь на кровати."
+                ]
+                sentence [
+                    блондинка "Блондиночка" []
+                    text " обнимает тебя справа."
+                ]
+                sentence [
+                    брюнетка "Брюнеточка" []
+                    text " обнимает тебя слева."
+                ]
+                sentence [
+                    text "Рядом с кроватью стоит "
+                    бабуля "бабуля в неприличном одежде" []
+                    text " с "
+                    тарелкаСПирожками "тарелкой пирожков" [
+                        action "Взять" []
+                    ]
+                    text " и спрашивает: «Еще пирожков, старый разбойник?»."
+                ]
+            ]
         }
 
     module Конец =
