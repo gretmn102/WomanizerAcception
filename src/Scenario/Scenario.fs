@@ -6,6 +6,11 @@ open Shilazeron.Helpers
 
 open WomanizerAcception.Scenario.SharedIds
 
+module ObjectAliases =
+    open WomanizerAcception.Scenario.SharedIds.Objects
+
+    let тарелкаСПирожками = object ТарелкаСПирожками.id
+
 module CharacterAliases =
     open WomanizerAcception.Scenario.SharedIds.Characters
 
@@ -25,6 +30,7 @@ module CharacterAliases =
     let бабуляIf = objectIf Бабуля.id
 
 open CharacterAliases
+open ObjectAliases
 
 module Objects =
     module ТарелкаСПирожками =
@@ -181,6 +187,16 @@ module Locations =
                         ) []
                         text " стоят возле стола и метают в друг друга молнии."
                     ]
+                    sentence [
+                        блондинкаIf "Блондиночка" (
+                            Expr.thisObjectHasState Блондинка.держитВолосыБрюнетки
+                        ) []
+                        text " с "
+                        брюнеткаIf "брюнеточкой" (
+                            Expr.thisObjectHasState Брюнетка.держитВолосыБлондинки
+                        ) []
+                        text " хватают друг друга за волосы."
+                    ]
                 ]
                 oneOf [
                     sentence [
@@ -207,16 +223,33 @@ module Locations =
                         ) [
                             action "Наплести про выбор спутницы жизни" [
                                 Statement.removeObjectState Блондинка.id Блондинка.метаетМолнииВБрюнетку
-                                // Statement.addObjectState Блондинка.id Блондинка.метаетМолнииВБрюнетку
+                                Statement.addObjectState Блондинка.id Блондинка.держитВолосыБрюнетки
 
                                 Statement.removeObjectState Брюнетка.id Брюнетка.метаетМолнииВБлондинку
-                                // Statement.addObjectState Брюнетка.id Брюнетка.метаетМолнииВБлондинку
+                                Statement.addObjectState Брюнетка.id Брюнетка.держитВолосыБлондинки
 
                                 Statement.removeObjectState Бабуля.id Бабуля.спрашиваетКакТыДошелДоТакого
-                                // Statement.addObjectState Бабуля.id Бабуля.спрашиваетКакТыДошелДоТакого
+                                Statement.addObjectState Бабуля.id Бабуля.предлагаетСпасительныйПирожок
+
+                                Statement.addObjectToThisLocation ТарелкаСПирожками.id
                             ]
                         ]
                         text " сидит за столом напротив тебя и спрашивает, как ты дошел до жизни такой."
+                    ]
+                    sentence [
+                        бабуляIf "Бабуля" (
+                            Expr.thisObjectHasState Бабуля.предлагаетСпасительныйПирожок
+                        ) []
+                        text " сидит напротив тебя с протянутой "
+                        тарелкаСПирожками "тарелкой с пирожками" [
+                            action "Взять" [
+                                Statement.removeObjectState Блондинка.id Блондинка.держитВолосыБрюнетки
+                                Statement.removeObjectState Брюнетка.id Брюнетка.держитВолосыБлондинки
+                                Statement.removeObjectState Бабуля.id Бабуля.предлагаетСпасительныйПирожок
+                                Statement.Goto Locations.Комната.id
+                            ]
+                        ]
+                        text "."
                     ]
                 ]
             ]
