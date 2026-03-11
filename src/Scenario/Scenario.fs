@@ -295,7 +295,9 @@ module Locations =
                     бабуля "бабуля в неприличном одежде" []
                     text " с "
                     тарелкаСПирожками "тарелкой пирожков" [
-                        action "Взять" []
+                        action "Взять" [
+                            Statement.Goto Locations.Конец.id
+                        ]
                     ]
                     text " и спрашивает: «Еще пирожков, старый разбойник?»."
                 ]
@@ -309,7 +311,11 @@ module Locations =
             Id = id
             Name = "Конец"
             InitObjects = []
-            Description = []
+            Description = [
+                sentence [
+                    text "Спасибо за игру! Надеемся, вам понравилось."
+                ]
+            ]
         }
 
 let scenario : GameScenario =

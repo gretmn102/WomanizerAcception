@@ -224,7 +224,7 @@ let mainTest =
             let location, next =
                 (location, next)
                 |> нажатьТарелкаСПирожками "Взять"
-                |> expectRefreshLocation
+                |> expectGoToLocation
 
             location |> expectEqualLocationName Конец.id
             location |> expectEqualLocationDescription [
