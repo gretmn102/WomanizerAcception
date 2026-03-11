@@ -186,9 +186,25 @@ let mainTest =
             ]
 
             let location, next =
+                let obj, next =
+                    (location, next)
+                    |> нажатьТарелкаСПирожками "Взять"
+                    |> expectAddObjectToHero
+                obj |> expectEqualAddedObjectToHero Пирожок.id
+                next |> expectRefreshLocation
+
+            let location, next =
+                let msg, next =
+                    (location, next)
+                    |> нажатьТарелкаСПирожками "Взять"
+                    |> expectShowMessage
+                msg |> expectEqualMessage "У тебя уже есть один."
+                next |> expectRefreshLocation
+
+            let location, next =
                 (location, next)
-                |> нажатьТарелкаСПирожками "Взять"
-                |> expectGoToLocation
+                |> selectObjectAction Пирожок.id "Съесть"
+                |> expectRefreshLocation
 
             location |> expectEqualLocationName Комната.id
             location |> expectEqualLocationDescription [
