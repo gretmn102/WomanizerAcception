@@ -91,7 +91,7 @@ NUGET
       FSharp.Core (>= 6.0)
       FSharpMyExt (>= 2.0.0-prerelease.8)
       Shilazeron (>= 0.14)
-    Thekla.Player (0.3.0)
+    Thekla.Player (0.3.1)
       Fable.Elmish (>= 4.1)
       Fable.Elmish.HMR (>= 7.0)
       Feliz (>= 2.7)
