@@ -5,7 +5,53 @@ open Shilazeron.TestEngine.Helpers
 
 open WomanizerAcception.Scenario
 open WomanizerAcception.Scenario.SharedIds
+open WomanizerAcception.Scenario.SharedIds.Objects
+open WomanizerAcception.Scenario.SharedIds.Locations
 open WomanizerAcception.Scenario.Tests.Utils
+
+module Objects =
+    open WomanizerAcception.Scenario.SharedIds.Objects
+
+    let тарелкаСПирожками =
+        object ТарелкаСПирожками.id
+
+module Characters =
+    open WomanizerAcception.Scenario.SharedIds.Characters
+
+    let ты =
+        object Ты.id
+
+    let блондинка =
+        object Блондинка.id
+
+    let брюнетка =
+        object Брюнетка.id
+
+    let бабуля =
+        object Бабуля.id
+
+module LocationActions =
+    open WomanizerAcception.Scenario.SharedIds.Characters
+    open WomanizerAcception.Scenario.SharedIds.Objects
+
+    let нажатьТы =
+        selectObjectAction Ты.id
+
+    let нажатьБлондинка =
+        selectObjectAction Блондинка.id
+
+    let нажатьБрюнетка =
+        selectObjectAction Брюнетка.id
+
+    let нажатьБабуля =
+        selectObjectAction Бабуля.id
+
+    let нажатьТарелкаСПирожками =
+        selectObjectAction ТарелкаСПирожками.id
+
+open Characters
+open Objects
+open LocationActions
 
 [<Tests>]
 let mainTest =
@@ -16,47 +62,174 @@ let mainTest =
             let reaction = start scenario
             let location, next = expectGoToLocation reaction
 
-            location |> expectEqualLocationName снаружиАптекиId
+            location |> expectEqualLocationName Ресторан.id
             location |> expectEqualLocationDescription [
                 [
-                    text "Из витрины виднеется "
-                    link "кое-что" [
-                        action "Осмотреть"
-                    ]
+                    ты "Ты" []
+                    text "сидишь за "
+                    link "столом" []
                     text "."
                 ]
                 [
-                    link "Стеклянная дверь" [
-                        action "Войти"
+                    text "Перед тобой сидит "
+                    блондинка "блондиночка" [
+                        action "Сказать комплимент"
                     ]
-                    text " приглашает тебя внутрь."
+                    text "."
                 ]
             ]
-            let next = (location, next) |> selectLinkAction "кое-что" "Осмотреть"
-            let msg, next = next |> expectShowMessage
-            Expect.equal "Это кое-что просто сводит тебя с ума. Ты долго собирался с духом, чтобы придти сюда и купить ЭТО." msg ""
-            let location, next = expectRefreshLocation next
-            let next = (location, next) |> selectLinkAction "Стеклянная дверь" "Войти"
-            let location, next = expectGoToLocation next
 
-            location |> expectEqualLocationName аптекаId
+            let location, next =
+                (location, next)
+                |> нажатьБлондинка "Сказать комплимент"
+                |> expectRefreshLocation
+
+            location |> expectEqualLocationName Ресторан.id
             location |> expectEqualLocationDescription [
                 [
-                    text "За "
-                    link "прилавком" [
-                        action "Подойти"
+                    text "Слева от стола появляется до боли "
+                    брюнетка "знакомая брюнеточка" [
+                        action "Удивиться"
                     ]
-                    text " снует "
-                    object milfId "знойная продавщица" [
-                        action "Осмотреть"
-                    ]
+                    text " и кричит на тебя: «Ловелас!»"
                     text "."
                 ]
                 [
-                    link "Выход" [
-                        action "Выйти"
+                    блондинка "Блондиночка" []
+                    text " смотрит на тебя округленными глазами."
+                ]
+            ]
+
+            let location, next =
+                (location, next)
+                |> нажатьБрюнетка "Удивиться"
+                |> expectRefreshLocation
+
+            location |> expectEqualLocationName Ресторан.id
+            location |> expectEqualLocationDescription [
+                [
+                    брюнетка "Брюнеточка" []
+                    text " стоит со скрещенными руками и злобно смотрит на тебя."
+                ]
+                [
+                    блондинка "Блондиночка" [
+                        action "Отрицать"
                     ]
-                    text " на улицу."
+                    text " уточняет у тебя: «Ты ловелас?»"
+                ]
+            ]
+
+            let location, next =
+                (location, next)
+                |> нажатьБлондинка "Отрицать"
+                |> expectRefreshLocation
+
+            location |> expectEqualLocationName Ресторан.id
+            location |> expectEqualLocationDescription [
+                [
+                    блондинка "Блондиночка" []
+                    text " и "
+                    брюнетка "брюнеточка" []
+                    text " переглядываются."
+                ]
+                [
+                    text "Справа стоит "
+                    бабуля "бабуля" [
+                        action "Огрызнуться"
+                    ]
+                    text " и спрашивает: «Внучок, ты ловелас, што ле?»."
+                ]
+            ]
+
+            let location, next =
+                (location, next)
+                |> нажатьБабуля "Огрызнуться"
+                |> expectRefreshLocation
+
+            location |> expectEqualLocationName Ресторан.id
+            location |> expectEqualLocationDescription [
+                [
+                    блондинка "Блондиночка" []
+                    text " с "
+                    брюнетка "брюнеточкой" []
+                    text " стоят возле стола и метают в друг друга молнии."
+                ]
+                [
+                    бабуля "Бабуля" [
+                        action "Наплести про выбор спутницы жизни"
+                    ]
+                    text " сидит за столом напротив тебя и спрашивает, как ты дошел до жизни такой."
+                ]
+            ]
+
+            let location, next =
+                (location, next)
+                |> нажатьБабуля "Наплести про выбор спутницы жизни"
+                |> expectRefreshLocation
+
+            location |> expectEqualLocationName Ресторан.id
+            location |> expectEqualLocationDescription [
+                [
+                    блондинка "Блондиночка" []
+                    text " с "
+                    брюнетка "брюнеточкой" []
+                    text " хватают друг друга за волосы."
+                ]
+                [
+                    бабуля "Бабуля" []
+                    text " сидит напротив тебя с протянутой "
+                    тарелкаСПирожками "тарелкой с пирожками" [
+                        action "Взять"
+                    ]
+                    text "."
+                ]
+            ]
+
+            let location, next =
+                (location, next)
+                |> нажатьТарелкаСПирожками "Взять"
+                |> expectGoToLocation
+
+            location |> expectEqualLocationName Комната.id
+            location |> expectEqualLocationDescription [
+                [
+                    ты "Ты" [
+                        action "Крепко задуматься"
+                    ]
+                    text " лежишь на кровати."
+                ]
+                [
+                    блондинка "Блондиночка" []
+                    text " обнимает тебя справа."
+                ]
+                [
+                    брюнетка "Брюнеточка" []
+                    text " обнимает тебя слева."
+                ]
+                [
+                    text "Рядом с кроватью стоит "
+                    бабуля "бабуля в неприличном одежде" []
+                    text " с "
+                    тарелкаСПирожками "тарелкой пирожков" [
+                        action "Взять"
+                    ]
+                    text " и спрашивает: «Еще пирожков, старый разбойник?»."
+                ]
+            ]
+            let location, next =
+                (location, next)
+                |> нажатьТы "Крепко задуматься"
+                |> expectRefreshLocation
+
+            let location, next =
+                (location, next)
+                |> нажатьТарелкаСПирожками "Взять"
+                |> expectGoToLocation
+
+            location |> expectEqualLocationName Конец.id
+            location |> expectEqualLocationDescription [
+                [
+                    text "Спасибо за игру! Надеемся, вам понравилось."
                 ]
             ]
             ()
