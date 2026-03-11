@@ -87,8 +87,8 @@ let mainTest =
             location |> expectEqualLocationName Ресторан.id
             location |> expectEqualLocationDescription [
                 [
-                    text "Слева от стола появляется до боли знакомая "
-                    брюнетка "брюнеточка" [
+                    text "Слева от стола появляется до боли "
+                    брюнетка "знакомая брюнеточка" [
                         action "Удивиться"
                     ]
                     text " и кричит на тебя: «Ловелас!»"

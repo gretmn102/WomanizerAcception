@@ -6,6 +6,22 @@ open Shilazeron.Helpers
 
 open WomanizerAcception.Scenario.SharedIds
 
+module CharacterAliases =
+    open WomanizerAcception.Scenario.SharedIds.Characters
+
+    let objectIf id description =
+        SentenceStatement.objectIf id (Expr.str description)
+
+    let ты = object Ты.id
+    let тыIf = objectIf Ты.id
+
+    let блондинка = object Блондинка.id
+    let блондинкаIf = objectIf Блондинка.id
+
+    let брюнетка = object Брюнетка.id
+
+open CharacterAliases
+
 module Objects =
     module ТарелкаСПирожками =
         open WomanizerAcception.Scenario.SharedIds.Objects.ТарелкаСПирожками
@@ -68,8 +84,42 @@ module Locations =
         let location: Location = {
             Id = id
             Name = "Ресторан"
-            InitObjects = []
-            Description = []
+            InitObjects = [Ты.id; Блондинка.id]
+            Description = [
+                sentence [
+                    тыIf "Ты" (
+                        Expr.not <| Expr.thisLocationHasObject Брюнетка.id
+                    ) []
+                    text "сидишь за "
+                    link "столом" []
+                    text "."
+                ]
+                sentence [
+                    text "Слева от стола появляется до боли "
+                    брюнетка "знакомая брюнеточка" [
+                        action "Удивиться" []
+                    ]
+                    text " и кричит на тебя: «Ловелас!»"
+                    text "."
+                ]
+                oneOf [
+                    sentence [
+                        text "Перед тобой сидит "
+                        блондинкаIf "блондиночка" (
+                            Expr.not <| Expr.thisLocationHasObject Брюнетка.id
+                        ) [
+                            action "Сказать комплимент" [
+                                Statement.addObjectToThisLocation Брюнетка.id
+                            ]
+                        ]
+                        text "."
+                    ]
+                    sentence [
+                        блондинка "Блондиночка" []
+                        text " смотрит на тебя округленными глазами."
+                    ]
+                ]
+            ]
         }
 
     module Комната =
