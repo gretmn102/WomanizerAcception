@@ -186,9 +186,28 @@ let mainTest =
             ]
 
             let location, next =
-                (location, next)
-                |> нажатьТарелкаСПирожками "Взять"
-                |> expectGoToLocation
+                let obj, next =
+                    (location, next)
+                    |> нажатьТарелкаСПирожками "Взять"
+                    |> expectAddObjectToHero
+                obj |> expectEqualAddedObjectToHero Пирожок.id
+                next |> expectRefreshLocation
+
+            let location, next =
+                let msg, next =
+                    (location, next)
+                    |> нажатьТарелкаСПирожками "Взять"
+                    |> expectShowMessage
+                msg |> expectEqualMessage "У тебя уже есть один."
+                next |> expectRefreshLocation
+
+            let location, next =
+                let obj, next =
+                    next
+                    |> selectInventoryObjectAction Пирожок.id "Съесть"
+                    |> expectRemoveObjectFromHero
+                expectEqualRemovedObjectFromHero obj Пирожок.id
+                next |> expectGoToLocation
 
             location |> expectEqualLocationName Комната.id
             location |> expectEqualLocationDescription [

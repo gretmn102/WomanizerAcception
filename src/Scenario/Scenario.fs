@@ -18,6 +18,8 @@ module ObjectAliases =
 
     let тарелкаСПирожками = object ТарелкаСПирожками.id
 
+    let пирожок = object Пирожок.id
+
 module CharacterAliases =
     open WomanizerAcception.Scenario.SharedIds.Characters
 
@@ -48,6 +50,33 @@ module Objects =
             Name = Expr.str "Тарелка с пирожками"
             InitStates = []
             Actions = []
+        }
+
+    module Пирожок =
+        open WomanizerAcception.Scenario.SharedIds.Objects
+        open WomanizerAcception.Scenario.SharedIds.Objects.Пирожок
+        open WomanizerAcception.Scenario.SharedIds.Characters
+
+        let object: Object = {
+            Id = id
+            Name = Expr.str "Пирожок"
+            InitStates = []
+            Actions = [
+                action "Съесть" [
+                    Statement.RemoveObjectFromHero id
+
+                    Statement.removeObjectState Блондинка.id Блондинка.держитВолосыБрюнетки
+                    Statement.removeObjectState Брюнетка.id Брюнетка.держитВолосыБлондинки
+                    Statement.removeObjectState Бабуля.id Бабуля.предлагаетСпасительныйПирожок
+
+                    yield! Statement.moveObjectToLocation Блондинка.id Locations.Комната.id
+                    yield! Statement.moveObjectToLocation Брюнетка.id Locations.Комната.id
+                    yield! Statement.moveObjectToLocation Бабуля.id Locations.Комната.id
+                    yield! Statement.moveObjectToLocation ТарелкаСПирожками.id Locations.Комната.id
+                    yield! Statement.moveObjectToLocation Ты.id Locations.Комната.id
+                    Statement.Goto Locations.Комната.id
+                ]
+            ]
         }
 
 module Characters =
@@ -250,16 +279,13 @@ module Locations =
                         text " сидит напротив тебя с протянутой "
                         тарелкаСПирожками "тарелкой с пирожками" [
                             action "Взять" [
-                                Statement.removeObjectState Блондинка.id Блондинка.держитВолосыБрюнетки
-                                Statement.removeObjectState Брюнетка.id Брюнетка.держитВолосыБлондинки
-                                Statement.removeObjectState Бабуля.id Бабуля.предлагаетСпасительныйПирожок
-
-                                yield! Statement.moveObjectToLocation Блондинка.id Locations.Комната.id
-                                yield! Statement.moveObjectToLocation Брюнетка.id Locations.Комната.id
-                                yield! Statement.moveObjectToLocation Бабуля.id Locations.Комната.id
-                                yield! Statement.moveObjectToLocation ТарелкаСПирожками.id Locations.Комната.id
-                                yield! Statement.moveObjectToLocation Ты.id Locations.Комната.id
-                                Statement.Goto Locations.Комната.id
+                                Statement.if' (
+                                    Expr.not <| Expr.heroHas Пирожок.id
+                                ) [
+                                    Statement.take Пирожок.id
+                                ] [
+                                    Statement.message "У тебя уже есть один."
+                                ]
                             ]
                         ]
                         text "."
@@ -322,6 +348,7 @@ let scenario : GameScenario =
     {
         Objects = [
             Objects.ТарелкаСПирожками.object
+            Objects.Пирожок.object
             Characters.Ты.object
             Characters.Блондинка.object
             Characters.Брюнетка.object

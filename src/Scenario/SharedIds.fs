@@ -30,6 +30,9 @@ module Objects =
     module ТарелкаСПирожками =
         let id = "ТарелкаСПирожками"
 
+    module Пирожок =
+        let id = "Пирожок"
+
 module Locations =
     module Ресторан =
         let id = "Ресторан"
